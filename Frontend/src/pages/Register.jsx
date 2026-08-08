@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../main.jsx'
+import { useDispatch } from 'react-redux'
+import { setuserData } from '../Redux/userSlice.js'
 
 function Register() {
     let navigate = useNavigate()
@@ -13,9 +15,8 @@ function Register() {
     let [password, setpassword] = useState("")
 
     let [loading, setloading] = useState(false)
-    const [message, setMessage] = useState("")
-
-
+    let [message, setMessage] = useState("")
+    let dispatch = useDispatch()
 
     let handleregister = async (e) => {
         e.preventDefault()
@@ -34,6 +35,7 @@ function Register() {
                     withCredentials: true
                 }
             )
+            dispatch(setuserData(user.data))
             console.log('User registered successfully:', user)
 
             setMessage("✅ Registered Successfully!")

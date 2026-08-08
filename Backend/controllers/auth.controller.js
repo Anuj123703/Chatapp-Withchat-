@@ -30,6 +30,7 @@ const register = async (req, res) => {
         res.cookie("token", token, {
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
             httpOnly: true,
+            sameSite: "strict", // Ensure cookies are sent only to the same site
             secure: false // false in development, and in production secure true and using https
         }
         )
@@ -58,6 +59,7 @@ const login = async (req, res) => {
         res.cookie("token", token, {
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
             httpOnly: true,
+            sameSite: "strict", // Ensure cookies are sent only to the same site
             secure: false // false in development, and in production secure true and using https
         })
         return res.status(200).json({ message: "User logged in successfully", user:registeredUser })

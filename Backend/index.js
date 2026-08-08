@@ -5,6 +5,7 @@ import authrouter from "./routes/auth.routes.js"
 import cookieParser from "cookie-parser"
 dotenv.config()
 import cors from "cors"
+import userrouter from "./routes/user.routes.js"
 
 const port = process.env.PORT || 7000
 
@@ -18,6 +19,7 @@ app.use(cors(
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth", authrouter)
+app.use("/api/user", userrouter)
 
 app.listen(port, () => {
     ConnectDB()

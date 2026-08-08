@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../main'
+import { useDispatch } from 'react-redux'
+import { setuserData } from '../Redux/userSlice.js'
 
 function Login() {
     let navigate = useNavigate()
@@ -13,6 +15,7 @@ function Login() {
 
     let [loading, setloading] = useState(false)
     const [message, setMessage] = useState("")
+    let dispatch = useDispatch()
 
 
     let handleLogin = async (e) => {
@@ -32,6 +35,7 @@ function Login() {
                     withCredentials: true
                 }
             )
+            dispatch(setuserData(user.data))
             console.log('User login succesfully ', user)
 
             setMessage("login Successfully!")
