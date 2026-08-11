@@ -1,25 +1,27 @@
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import axios from "axios"
 import { API_URL } from "../main.jsx"
-import { setuserData } from "../Redux/userSlice.js"
+import { setUserData } from "../Redux/userSlice.js"
 
+const useGetCurrentUser = () => {
+    const dispatch = useDispatch()
 
-const getCurrentUser = async () => {
     useEffect(() => {
-        let dispatch = useDispatch()
-        let { setuserData } = useSelector((state) => state.user)
         const fetchCurrentUser = async () => {
             try {
-                let result = await axios.get(`${API_URL}/api/auth/current`, {
-                    withCredentials: true
-                })
-                dispatch(setuserData(result.data))
+                const result = await axios.get(
+                    `${API_URL}/api/user/current`,
+                    { withCredentials: true }
+                )
+                dispatch(setUserData(result.data))
             } catch (error) {
-                console.error('Error fetching current user:', error)
+                console.error("Error fetching current user:", error)
             }
         }
+
         fetchCurrentUser()
-    }, { userData })
+    }, [dispatch])
 }
-export default getCurrentUser
+
+export default useGetCurrentUser

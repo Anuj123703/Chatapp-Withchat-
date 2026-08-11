@@ -4,7 +4,8 @@ import { useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../main.jsx'
 import { useDispatch } from 'react-redux'
-import { setuserData } from '../Redux/userSlice.js'
+import { setUserData } from '../Redux/userSlice.js'
+
 
 function Register() {
     let navigate = useNavigate()
@@ -35,7 +36,7 @@ function Register() {
                     withCredentials: true
                 }
             )
-            dispatch(setuserData(user.data))
+            dispatch(setUserData(user.data))
             console.log('User registered successfully:', user)
 
             setMessage("✅ Registered Successfully!")

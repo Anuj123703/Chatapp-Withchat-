@@ -7,7 +7,9 @@ const register = async (req, res) => {
     try {
         const { username, email, password } = req.body
 
-        const existingUser = await User.findOne({ username, email })
+        await User.findOne({
+            $or: [{ username }, { email }]
+        })
         if (existingUser) {
             return res.send({ message: "Username or email already exists" })
         }
@@ -37,7 +39,8 @@ const register = async (req, res) => {
         return res.status(201).json({ message: "User registered successfully", user })
 
     } catch (error) {
-        return res.status(500).json({ message: `Internal server error`, })
+        console.log("REGISTER ERROR:", error)
+        return res.status(500).json({ message: "Internal server error" })
     }
 }
 const login = async (req, res) => {
