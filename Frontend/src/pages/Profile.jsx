@@ -6,7 +6,7 @@ import { FaHome } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import axios from 'axios'
-import { API_URL } from '../main.jsx'
+import { API_URL } from '../config.js'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../Redux/userSlice.js'
 import { useEffect } from 'react'
@@ -45,6 +45,7 @@ const Profile = () => {
       setloading(false)
       // Update the user data in the Redux store
       dispatch(setUserData(res.data))
+      navigate("/")
     } catch (error) {
       console.error("Error updating profile:", error)
       setloading(false)

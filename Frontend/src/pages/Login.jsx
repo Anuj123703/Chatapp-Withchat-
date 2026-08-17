@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../main'
+import { API_URL } from '../config.js'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../Redux/userSlice.js'
 
@@ -25,7 +25,7 @@ function Login() {
         setMessage("")
 
         try {
-            let user = await axios.post(
+            let result = await axios.post(
                 `${API_URL}/api/auth/login`,
                 {
                     email,
@@ -35,14 +35,13 @@ function Login() {
                     withCredentials: true
                 }
             )
-            dispatch(setUserData(user.data))
-            console.log('User login succesfully ', user)
+            dispatch(setUserData(result.data.user))
 
             setMessage("login Successfully!")
+            navigate('/')
 
             setemail("")
             setpassword("")
-            // setTimeout(() => navigate('/'), 1000)
 
         } catch (error) {
             setMessage(error.response?.data?.message || "❌ Login failed")

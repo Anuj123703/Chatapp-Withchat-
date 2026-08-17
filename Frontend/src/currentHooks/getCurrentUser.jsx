@@ -1,8 +1,9 @@
 import { useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
-import { API_URL } from "../main.jsx"
+import { API_URL } from "../config.js"
 import { setUserData } from "../Redux/userSlice.js"
+
 
 const useGetCurrentUser = () => {
     const dispatch = useDispatch()
@@ -16,7 +17,8 @@ const useGetCurrentUser = () => {
                 )
                 dispatch(setUserData(result.data))
             } catch (error) {
-                console.error("Error fetching current user:", error)
+                console.log("STATUS:", error.response?.status)
+                console.log("MESSAGE:", error.response?.data)
             }
         }
 

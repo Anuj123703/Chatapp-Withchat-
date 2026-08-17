@@ -7,9 +7,15 @@ const register = async (req, res) => {
     try {
         const { username, email, password } = req.body
 
-        await User.findOne({
-            $or: [{ username }, { email }]
-        })
+        const existingUser = await User.findOne(
+            {
+                $or:
+                    [
+                        { username },
+                        { email }
+                    ]
+            }
+        )
         if (existingUser) {
             return res.send({ message: "Username or email already exists" })
         }
@@ -65,7 +71,7 @@ const login = async (req, res) => {
             sameSite: "strict", // Ensure cookies are sent only to the same site
             secure: false // false in development, and in production secure true and using https
         })
-        return res.status(200).json({ message: "User logged in successfully", user:registeredUser })
+        return res.status(200).json({ message: "User logged in successfully", user: registeredUser })
 
     } catch (error) {
         console.log("LOGIN ERROR:", error);

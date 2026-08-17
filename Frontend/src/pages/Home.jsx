@@ -1,8 +1,13 @@
 import React from 'react'
+import Sidebar from '../Components/Sidebar'
+import MessageArea from '../Components/MessageArea'
 
 function Home() {
   return (
-    <div>Home Page</div>
+    <div className='w-full h-screen'>
+      <Sidebar />
+      <MessageArea/>
+    </div>
   )
 }
 

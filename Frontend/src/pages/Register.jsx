@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../main.jsx'
+import { API_URL } from '../config.js'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../Redux/userSlice.js'
 
@@ -37,7 +37,7 @@ function Register() {
                 }
             )
             dispatch(setUserData(user.data))
-            console.log('User registered successfully:', user)
+            navigate("/profile")
 
             setMessage("✅ Registered Successfully!")
             setusername("")
