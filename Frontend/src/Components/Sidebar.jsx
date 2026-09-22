@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import dp from '../assets/dp.png'
 import { CiSearch } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa";
-import { setOtherUsersData, setUserData } from '../Redux/userSlice';
+import { setOtherUsersData, setselectedUser, setUserData } from '../Redux/userSlice';
 import { IoMdLogOut } from "react-icons/io";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,8 @@ import { API_URL } from '../config.js';
 const Sidebar = () => {
     let { userData, OtherUsersData } = useSelector((state) => state.user)
     let [search, setSearch] = useState(false)
+    let { selectedUser } = useSelector(state => state.user)
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -37,7 +39,7 @@ const Sidebar = () => {
         }
     };
     return (
-        <div className="lg:w-[30%] w-full h-screen bg-blue-100 fixed left-0 top-0 z-10">
+        <div className={`md:w-[30%] w-full ${selectedUser ? "hidden md:flex" : "flex"} flex-col bg-blue-100 h-screen `}>
             {/* for logout  */}
             <div
                 className="fixed bottom-[20px] left-[20px] w-[50px] h-[50px] rounded-full flex justify-center items-center  bg-blue-400 overflow-hidden cursor-pointer"
@@ -110,12 +112,15 @@ const Sidebar = () => {
                 </div>
 
             </div>
-            <div className='border-2 border-black mt-[20px] p-2 flex flex-col gap-[10px] justify-center ' >
+            <div
+                className=' mt-[20px] p-2 flex flex-col gap-[10px] justify-center '
+            >
                 {OtherUsersData?.map(
                     (user) => {
                         return (
                             <div
-                                className=' border-2 border-blue-400 rounded-full bg-blue-200 flex items-center gap-[20px] shadow-2xl '
+                                className=' border-2 border-blue-400 rounded-full bg-blue-200 flex items-center gap-[20px] shadow-2xl cursor-grab'
+                                onClick={() => dispatch(setselectedUser(user))}
                                 key={user._id}
                             >
                                 <div className=" w-[50px] h-[50px] rounded-full  bg-white overflow-hidden ">
