@@ -4,7 +4,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../config.js'
 import { useDispatch } from 'react-redux'
-import { setUserData } from '../Redux/userSlice.js'
+import { setselectedUser, setUserData } from '../Redux/userSlice.js'
 
 function Login() {
     let navigate = useNavigate()
@@ -36,6 +36,7 @@ function Login() {
                 }
             )
             dispatch(setUserData(result.data.user))
+            dispatch(setselectedUser(null))
 
             setMessage("login Successfully!")
             navigate('/')
