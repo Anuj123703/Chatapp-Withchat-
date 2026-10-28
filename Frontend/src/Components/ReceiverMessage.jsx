@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRef } from "react";
 
 const ReceiverMessage = ({ message, image }) => {
+
+    let scroll=useRef()
+    useEffect(()=>{
+        scroll.current.scrollIntoView({ behavior: "smooth" })
+
+    }, [message, image])    
+
+    const handleImageScroll=()=>{
+        scroll.current.scrollIntoView({ behavior: "smooth" })
+
+    }
 
     const handleDownload = async () => {
         try {
@@ -27,7 +39,8 @@ const ReceiverMessage = ({ message, image }) => {
 
     return (
         <div className="flex justify-start mb-3">
-            <div>
+            <div ref={scroll}
+>  
 
                 {image && (
                     <div>
@@ -40,6 +53,7 @@ const ReceiverMessage = ({ message, image }) => {
                         >
                             <img
                                 src={image}
+                                onLoad={handleImageScroll}
                                 alt="received"
                                 className="w-[250px] rounded-lg cursor-pointer"
                             />
@@ -58,7 +72,8 @@ const ReceiverMessage = ({ message, image }) => {
                 )}
 
                 {message && (
-                    <p className="bg-gray-200 text-black px-4 py-2 rounded-lg mt-1">
+                    <p 
+                    className="bg-gray-200 text-black px-4 py-2 rounded-lg mt-1">
                         {message}
                     </p>
                 )}

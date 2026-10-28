@@ -1,14 +1,13 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.modal.js";
 import uploadCloudinary from "../config/Cloudinary.js";
+import {io, getReceiverSocketId } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
-    console.log("SEND MESSAGE CALLED");
     let sender = req.userid;
     let receiver = req.params.receiverid;
     let { message } = req.body;
-    console.log("UPLOADING TO CLOUDINARY");
     let image = req.file
       ? await uploadCloudinary(req.file.path)
       : null;
@@ -34,6 +33,11 @@ export const sendMessage = async (req, res) => {
 
     conversation.messages.push(newMessage._id);
     await conversation.save();
+    const receiverSocketId = getReceiverSocketId(receiver);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(201).json(newMessage);
 

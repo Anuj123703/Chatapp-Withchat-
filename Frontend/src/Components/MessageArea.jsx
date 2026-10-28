@@ -16,7 +16,7 @@ import axios from 'axios';
 import { setMessage } from '../Redux/message_slice';
 
 const MessageArea = () => {
-  let { selectedUser, userData } = useSelector(state => state.user)
+  let { selectedUser, userData, socket } = useSelector(state => state.user)
   let [showemojiPicker, setshowemojiPicker] = useState(false)
   let [selectedEmoji, setSelectedEmoji] = useState("");
   let [frontendImage, setFrontendImage] = useState(null);
@@ -49,6 +49,9 @@ const MessageArea = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    if (selectedEmoji.trim().length === 0 && !backendImage) {
+      return;
+    }
     try {
       setIsSending(true);
       let formData = new FormData();
@@ -76,6 +79,20 @@ const MessageArea = () => {
       setIsSending(false);
     }
   };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = (mess) => {
+      dispatch(setMessage([...messages, mess]));
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [socket, messages, dispatch]);
 
   const handleImage = (e) => {
     let file = e.target.files[0];
@@ -205,11 +222,14 @@ const MessageArea = () => {
                 onClick={() => image.current.click()}
               />
               {/* Send */}
-              <button type='submit' disabled={isSending} >
-                <BsSendFill
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-blue-500 text-xl cursor-pointer"
-                />
-              </button>
+              {(selectedEmoji.trim().length > 0 || backendImage) && (
+                <button type="submit" disabled={isSending}>
+                  <BsSendFill
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-blue-500 text-xl cursor-pointer"
+                  />
+                </button>
+              )}
+              
             </form>
           </div>
 
