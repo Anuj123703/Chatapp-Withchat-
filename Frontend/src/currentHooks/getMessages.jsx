@@ -7,8 +7,9 @@ import { setMessage } from "../Redux/message_slice.js"
 
 const getMessage = () => {
     const dispatch = useDispatch()
-    const {userData, selectedUser} = useSelector((state) => state.user?.userData);
-
+    const { userData, selectedUser } = useSelector(
+        (state) => state.user
+    );
     useEffect(() => {
 
         if (!userData) return;
@@ -16,7 +17,7 @@ const getMessage = () => {
         const fetchMessage = async () => {
             try {
                 const result = await axios.get(
-                    `${API_URL}/api/message/get/${selectedUser._id}`,
+                    `${API_URL}/api/messages/messages/${selectedUser._id}`,
                     { withCredentials: true }
                 )
                 dispatch(setMessage(result.data))

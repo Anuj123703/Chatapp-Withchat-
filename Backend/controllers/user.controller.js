@@ -54,3 +54,31 @@ export const getOtherUsers = async (req,res) => {
         return res.status(500).json({ message: `get other users error ${error}` })
     }
 }
+export const searchUser = async (req, res) => {
+    try {
+        const search = req.query.search?.trim()
+
+        if (!search) {
+            return res.status(400).json({
+                message: "Search query is required"
+            })
+        }
+
+        const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+        const users = await User.find({
+            _id: { $ne: req.userId },
+            $or: [
+                { name: { $regex: safeSearch, $options: "i" } },
+                { username: { $regex: safeSearch, $options: "i" } }
+            ]
+        }).select("-password")
+
+        return res.status(200).json(users)
+
+    } catch (error) {
+        return res.status(500).json({
+            message: `Search user error: ${error.message}`
+        })
+    }
+}

@@ -8,7 +8,8 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { FaRegImage } from "react-icons/fa6";
 import { BsSendFill } from "react-icons/bs";
 import EmojiPicker from 'emoji-picker-react';
-import { useState, useEffect, useRef } from 'react'; 
+import { useState, useEffect, useRef, useContext } from 'react';
+import { SocketContext } from '../context/socketContext.jsx'; 
 import SenderMessage from './SenderMessage.jsx';
 import ReceiverMessage from './ReceiverMessage.jsx';
 import { API_URL } from '../config';
@@ -16,7 +17,8 @@ import axios from 'axios';
 import { setMessage } from '../Redux/message_slice';
 
 const MessageArea = () => {
-  let { selectedUser, userData, socket } = useSelector(state => state.user)
+  let { selectedUser, userData } = useSelector(state => state.user);
+  const socket = useContext(SocketContext);
   let [showemojiPicker, setshowemojiPicker] = useState(false)
   let [selectedEmoji, setSelectedEmoji] = useState("");
   let [frontendImage, setFrontendImage] = useState(null);
@@ -81,10 +83,23 @@ const MessageArea = () => {
   };
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !selectedUser) return;
 
     const handleNewMessage = (mess) => {
-      dispatch(setMessage([...messages, mess]));
+      if (
+        String(mess.sender) === String(selectedUser._id) ||
+        String(mess.receiver) === String(selectedUser._id)
+      ) {
+        dispatch((dispatch, getState) => {
+          const currentMessages = getState().message.messages;
+
+          if (!currentMessages.some(
+            item => item._id === mess._id
+          )) {
+            dispatch(setMessage([...currentMessages, mess]));
+          }
+        });
+      }
     };
 
     socket.on("newMessage", handleNewMessage);
@@ -92,7 +107,7 @@ const MessageArea = () => {
     return () => {
       socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, messages, dispatch]);
+  }, [socket, selectedUser?._id, dispatch]);
 
   const handleImage = (e) => {
     let file = e.target.files[0];

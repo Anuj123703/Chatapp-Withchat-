@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+
 const userSlice = createSlice(
   {
     name: "user",
@@ -8,8 +9,8 @@ const userSlice = createSlice(
       userData: null,
       OtherUsersData: null,
       selectedUser: null,
-      socket: null,
-      onlineUsers: null
+      onlineUsers: null,
+      searchdata: null
     },
     reducers: {
       // Define reducers for the user slice
@@ -22,14 +23,14 @@ const userSlice = createSlice(
       setselectedUser: (state, action) => {
         state.selectedUser = action.payload
       },
-      setSocket: (state, action) => {
-        state.socket = action.payload
-      },
       setOnlineUsers: (state, action) => {
         state.onlineUsers = action.payload
       },
+      setSearchdata: (state, action) => {
+        state.searchdata = action.payload
+      }
     }
   }
 )
-export const { setOtherUsersData, setUserData, setselectedUser, setSocket, setOnlineUsers } = userSlice.actions
+export const { setOtherUsersData, setUserData, setselectedUser, setOnlineUsers, setSearchdata } = userSlice.actions
 export default userSlice.reducer

@@ -23,23 +23,27 @@ export const sendMessage = async (req, res) => {
       });
     }
 
-    let newMessage = await Message.create({
+    const savedMessage = await Message.create({
       conversationId: conversation._id,
-      sender: sender,
-      receiver: receiver,
-      message: message,
-      image: image
+      sender,
+      receiver,
+      message,
+      image
     });
 
-    conversation.messages.push(newMessage._id);
+    conversation.messages.push(savedMessage._id);
     await conversation.save();
+
     const receiverSocketId = getReceiverSocketId(receiver);
 
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
+      io.to(receiverSocketId).emit(
+        "newMessage",
+        savedMessage.toObject()
+      );
     }
 
-    res.status(201).json(newMessage);
+    res.status(201).json(savedMessage);
 
   } catch (error) {
     console.log("SEND MESSAGE ERROR:", error);
