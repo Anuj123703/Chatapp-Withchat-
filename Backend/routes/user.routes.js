@@ -1,5 +1,5 @@
 import express from "express"
-import isAuth from "../middleware/isauth.js"
+import isAuth from "../middleware/isAuth.js"
 import { editprofile, getCurrentuser } from "../controllers/user.controller.js"
 import { upload } from "../middleware/Multer.js"
 import { getOtherUsers } from '../controllers/user.controller.js';
