@@ -1,5 +1,5 @@
 import express from "express"
-import isAuth from "../middleware/isauth.js"
+import isAuth from "../middleware/isAuth.js"
 import { upload } from "../middleware/Multer.js"
 import { sendMessage } from "../controllers/message.controller.js"
 import { getMessages } from "../controllers/message.controller.js"
